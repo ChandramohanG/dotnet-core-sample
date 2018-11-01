@@ -6,14 +6,8 @@ pool:
   
 variables:
   buildConfiguration: 'Release'
-
-steps:
-- script: |
-    dotnet build --configuration $(buildConfiguration)
-    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
-    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
- 
-- task: SonarSource.sonarcloud.145293828abc302c83177b5d2f528f056b2eabf7.SonarCloudPrepare@1
+  
+- task: SonarSource.sonarcloud.9534b431f2ec622be4c2f52f30f4fa53665399ba.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
     SonarCloud: 'https://sonarcloud.io/dashboard?id=ChandramohanG_DevOpsDemo'
@@ -28,8 +22,14 @@ steps:
        # Additional properties that will be passed to the scanner, 
        # Put one key=value per line, example:
        sonar.exclusions=**/*.css
-       #sonar.login="145293828abc302c83177b5d2f528f056b2eabf7"
-     
+       #sonar.login="9534b431f2ec622be4c2f52f30f4fa53665399ba"
+steps:
+- script: |
+    dotnet build --configuration $(buildConfiguration)
+    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
+    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+ 
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
