@@ -10,6 +10,13 @@ resources:
   clean: true
   
 steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+
+    projects: '**/*.csproj'
+
 - task: SonarSource.sonarcloud.9534b431f2ec622be4c2f52f30f4fa53665399ba.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
