@@ -6,7 +6,8 @@ pool:
   
 variables:
   buildConfiguration: 'Release'
-  
+
+steps:
 - task: SonarSource.sonarcloud.9534b431f2ec622be4c2f52f30f4fa53665399ba.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
@@ -23,7 +24,7 @@ variables:
        # Put one key=value per line, example:
        sonar.exclusions=**/*.css
        #sonar.login="9534b431f2ec622be4c2f52f30f4fa53665399ba"
-steps:
+
 - script: |
     dotnet build --configuration $(buildConfiguration)
     dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
