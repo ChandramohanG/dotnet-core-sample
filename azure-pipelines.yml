@@ -16,22 +16,16 @@ steps:
 
     projects: '**/*.csproj'
 
-- task: SonarSource.sonarcloud.9534b431f2ec622be4c2f52f30f4fa53665399ba.SonarCloudPrepare@1
+- task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
-    SonarCloud: 'https://sonarcloud.io/dashboard?id=aspnetcoresample'
+    SonarCloud: 'https://sonarcloud.io/'
 
     organization: 'chandramohang-github'
 
-    projectKey: 'aspnetcoresample'
+    projectKey: aspnetcoresample
 
     projectName: aspnetcoresample
-
-    extraProperties: |
-       # Additional properties that will be passed to the scanner, 
-       # Put one key=value per line, example:
-       sonar.exclusions=**/*.css
-       #sonar.login="9534b431f2ec622be4c2f52f30f4fa53665399ba"
 
 - script: |
     dotnet build --configuration $(buildConfiguration)
