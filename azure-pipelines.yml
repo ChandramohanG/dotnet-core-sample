@@ -13,7 +13,7 @@ steps:
     dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
  
-- task: SonarSource.sonarcloud.24d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+- task: SonarCloudPrepare-@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
     SonarCloud: 'https://sonarcloud.io/dashboard?id=ChandramohanG_DevOpsDemo'
@@ -37,7 +37,7 @@ steps:
 
     projects: '**/*.csproj'
 
-- task: SonarSource.sonarcloud.de096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   
 - task: PublishTestResults@2
