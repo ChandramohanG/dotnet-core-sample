@@ -37,7 +37,7 @@ steps:
 
     projects: '**/*.csproj'
 
-- task: SonarSource.sonarcloud.145293828abc302c83177b5d2f528f056b2eabf7.SonarCloudAnalyze@1
+- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   
 - task: PublishTestResults@2
