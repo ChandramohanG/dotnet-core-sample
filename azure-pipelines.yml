@@ -1,5 +1,3 @@
-# Build ASP.NET Core project using Azure Pipelines
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core?view=vsts
 
 pool:
   vmImage: 'Ubuntu 16.04'
@@ -7,6 +5,10 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
+resources:
+- repo: self
+  clean: true
+  
 steps:
 - task: SonarSource.sonarcloud.9534b431f2ec622be4c2f52f30f4fa53665399ba.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
