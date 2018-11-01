@@ -7,15 +7,72 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
+queue:
+  demands: java
+
 steps:
-- script: |
-    dotnet build --configuration $(buildConfiguration)
-    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
-    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
-
-- task: PublishTestResults@2
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
   inputs:
-    testRunner: VSTest
-    testResultsFiles: '**/*.trx'
+    command: restore
 
-- task: PublishBuildArtifacts@1
+    projects: '**/*.csproj'
+
+
+- task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: 'https://sonarcloud.io/dashboard?id=ChandramohanG_DevOpsDemo'
+
+    organization: 'chandramohang-github'
+
+    projectKey: 'ChandramohanG_DevOpsDemo'
+
+    projectName: DevOpsDemo
+
+    extraProperties: |
+     # Additional properties that will be passed to the scanner, 
+     # Put one key=value per line, example:
+     sonar.exclusions=*.css
+     #sonar.login="145293828abc302c83177b5d2f528f056b2eabf7"
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    projects: '**/*.csproj'
+
+- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+  displayName: 'Run Code Analysis'
+
+
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    azureSubscription: ACR
+
+    azureContainerRegistry: '{"loginServer":"cloudcontainerregistry.azurecr.io", "id" : "/subscriptions/6bff6c5c-be29-427b-a26d-dbecde768418/resourceGroups/Meetup_RG/providers/Microsoft.ContainerRegistry/registries/cloudcontainerregistry"}'
+
+    dockerFile: dockerfile
+
+    imageName: 'cloudcontainerregistry/aspnetcoredocker:$(Build.BuildId)'
+
+    includeLatestTag: true
+
+    enforceDockerNamingConvention: false
+
+
+- task: Docker@0
+  displayName: 'Push to ACR'
+  inputs:
+    azureSubscription: ACR
+
+    azureContainerRegistry: '{"loginServer":"cloudcontainerregistry.azurecr.io", "id" : "/subscriptions/6bff6c5c-be29-427b-a26d-dbecde768418/resourceGroups/Meetup_RG/providers/Microsoft.ContainerRegistry/registries/cloudcontainerregistry"}'
+
+    action: 'Run a Docker command'
+
+    customCommand: 'push cloudcontainerregistry.azurecr.io/cloudcontainerregistry/aspnetcoredocker:latest'
+
+    enforceDockerNamingConvention: false
+
+  enabled: false
