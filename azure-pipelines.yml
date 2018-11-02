@@ -26,7 +26,13 @@ steps:
     projectKey: aspnetcoresample
 
     projectName: aspnetcoresample
-
+    
+    extraProperties: |
+       # Additional properties that will be passed to the scanner, 
+       # Put one key=value per line, example:
+       sonar.exclusions=**/*.css
+       #sonar.login="145293828abc302c83177b5d2f528f056b2eabf7"
+       
 - script: |
     dotnet build --configuration $(buildConfiguration)
     dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
